@@ -51,6 +51,7 @@ builder.Services
 
         client.BaseAddress = new Uri(baseUrl);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-    });
+    })
+    .AddTodoistResilience();
 
 builder.Build().Run();
