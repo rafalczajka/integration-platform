@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/GoogleDrive/infra/**'
       - 'integrations/GoogleDrive/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 

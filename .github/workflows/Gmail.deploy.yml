@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/Gmail/infra/**'
       - 'integrations/Gmail/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 

@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/WeightTracker/infra/**'
       - 'integrations/WeightTracker/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 

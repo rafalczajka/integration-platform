@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/Todoist/infra/**'
       - 'integrations/Todoist/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 

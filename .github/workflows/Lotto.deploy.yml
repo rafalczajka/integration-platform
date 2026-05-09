@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/Lotto/infra/**'
       - 'integrations/Lotto/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 

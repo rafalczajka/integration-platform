@@ -6,6 +6,8 @@ on:
     paths:
       - 'integrations/IntegrationTemplate/infra/**'
       - 'integrations/IntegrationTemplate/src/**'
+      - 'infrastructure/modules/**'
+      - 'infrastructure/lib/**'
       - 'Directory.*.props'
       - 'global.json'
 
