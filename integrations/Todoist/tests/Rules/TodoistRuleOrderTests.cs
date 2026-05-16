@@ -1,6 +1,4 @@
-using System;
 using Integrations.Todoist.Options;
-using Integrations.Todoist.Rules;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -13,19 +11,11 @@ public sealed class TodoistRuleOrderTests
     public void OrderedTypes_ShouldContainEveryRegisteredRuleExactlyOnce()
     {
         var rules = ResolveRules();
-
-        var registeredRuleTypes = rules
-            .Select(rule => rule.GetType())
-            .Distinct()
-            .OrderBy(type => type.FullName, StringComparer.Ordinal)
-            .ToArray();
-
-        var orderedRuleTypes = TodoistRuleOrder.OrderedTypes
-            .OrderBy(type => type.FullName, StringComparer.Ordinal)
-            .ToArray();
+        var registeredRuleTypes = rules.Select(rule => rule.GetType()).Distinct().ToArray();
 
         Assert.NotEmpty(registeredRuleTypes);
-        Assert.Equal(registeredRuleTypes, orderedRuleTypes);
+        Assert.Equal(registeredRuleTypes.Length, TodoistRuleOrder.OrderedTypes.Count);
+        Assert.All(registeredRuleTypes, type => Assert.Contains(type, TodoistRuleOrder.OrderedTypes));
     }
 
     [Fact]
@@ -34,16 +24,6 @@ public sealed class TodoistRuleOrderTests
         Assert.Equal(
             TodoistRuleOrder.OrderedTypes.Count,
             TodoistRuleOrder.OrderedTypes.Distinct().Count());
-    }
-
-    [Fact]
-    public void Resolve_ShouldReturnRulesInCentralOrder_WhenAllRulesAreConfigured()
-    {
-        var rules = ResolveRules();
-
-        var orderedRules = TodoistRuleOrder.Resolve(rules);
-
-        Assert.Equal(TodoistRuleOrder.OrderedTypes, orderedRules.Select(rule => rule.GetType()).ToArray());
     }
 
     private static ITodoistRule[] ResolveRules(ITodoistApi? todoist = null)

@@ -11,17 +11,17 @@ internal static class TodoistRuleOrder
 {
     private static readonly Type[] OrderedRuleTypes =
     [
+        typeof(BlockedTaskCommentRule),
         typeof(SubtaskLabelRule),
         typeof(NonSubtaskLabelRule),
         typeof(SubtaskDueDateRule),
         typeof(RecurringTaskInactiveLabelRule),
-        typeof(RecurringTaskInactiveReportRule),
-        typeof(BlockedTaskCommentRule),
-        typeof(BlockedTaskReportRule),
         typeof(UnusedLabelsCleanupRule),
+        typeof(BlockedTaskReportRule),
+        typeof(UpcomingDeadlineTaskReportRule),
         typeof(HighestPriorityTaskReportRule),
         typeof(ImpactTaskReportRule),
-        typeof(UpcomingDeadlineTaskReportRule)
+        typeof(RecurringTaskInactiveReportRule)
     ];
 
     public static IReadOnlyList<Type> OrderedTypes => OrderedRuleTypes;
