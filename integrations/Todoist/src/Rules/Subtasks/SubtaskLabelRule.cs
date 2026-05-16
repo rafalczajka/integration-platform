@@ -7,6 +7,9 @@ namespace Integrations.Todoist.Rules.Subtasks;
 /// Enforces that subtasks have only the subtask label and propagates any other
 /// labels from subtasks to their parent tasks.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class SubtaskLabelRule(
     ITodoistApi todoist,
     ILogger<SubtaskLabelRule> logger) : ITodoistRule

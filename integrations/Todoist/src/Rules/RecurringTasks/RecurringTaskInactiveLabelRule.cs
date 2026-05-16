@@ -10,6 +10,9 @@ namespace Integrations.Todoist.Rules.RecurringTasks;
 /// tasks without a due date get only the inactive label, and recurring tasks
 /// never keep the inactive label.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class RecurringTaskInactiveLabelRule(
     ITodoistApi todoist,
     IOptions<TodoistProjectIdsOptions> options,

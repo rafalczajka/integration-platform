@@ -6,6 +6,9 @@ namespace Integrations.Todoist.Rules.Subtasks;
 /// <summary>
 /// Removes due dates from subtasks so that only parent tasks define scheduling.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class SubtaskDueDateRule(
     ITodoistApi todoist,
     ILogger<SubtaskDueDateRule> logger) : ITodoistRule

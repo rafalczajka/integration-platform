@@ -6,6 +6,9 @@ namespace Integrations.Todoist.Rules.Subtasks;
 /// <summary>
 /// Removes the subtask label from tasks that are not subtasks but have it assigned.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class NonSubtaskLabelRule(
     ITodoistApi todoist,
     ILogger<NonSubtaskLabelRule> logger) : ITodoistRule

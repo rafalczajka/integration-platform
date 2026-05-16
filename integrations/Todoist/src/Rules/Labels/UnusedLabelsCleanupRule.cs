@@ -6,6 +6,9 @@ namespace Integrations.Todoist.Rules.Labels;
 /// <summary>
 /// Deletes labels that are not assigned to any task.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class UnusedLabelsCleanupRule(
     ITodoistApi todoist,
     ILogger<UnusedLabelsCleanupRule> logger) : ITodoistRule

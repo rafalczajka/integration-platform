@@ -8,6 +8,9 @@ namespace Integrations.Todoist.Rules.BlockedTasks;
 /// Validates that blocked tasks have blocker comments pointing to Todoist task URLs.
 /// Also adds blocker labels to tasks from the comments.
 /// </summary>
+/// <remarks>
+/// <b>Warning:</b> This rule modifies Todoist data.
+/// </remarks>
 internal sealed class BlockedTaskCommentRule(
     ITodoistApi todoist,
     ILogger<BlockedTaskCommentRule> logger) : ITodoistRule
