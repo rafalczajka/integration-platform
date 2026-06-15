@@ -15,7 +15,6 @@ updates:
     schedule:
       interval: weekly
     ignore:
-      - dependency-name: Microsoft.ApplicationInsights.WorkerService
       - dependency-name: Microsoft.CodeAnalysis.CSharp
     groups:
       nuget:
