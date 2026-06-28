@@ -54,7 +54,7 @@ internal sealed class CheckStatus(
 
         var body = $"""
             No weight entry for today was detected.
-            Checked at: {DateTimeOffset.UtcNow:O}.
+            Checked at: {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm} UTC
             """;
 
         await notificationSender.SendAsync(subject, body, cancellationToken);
