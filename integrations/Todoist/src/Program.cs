@@ -3,6 +3,7 @@ using Integrations.Notifications;
 using Integrations.Options;
 using Integrations.Telemetry;
 using Integrations.Todoist.Options;
+using Integrations.Todoist.Reports;
 using Integrations.Todoist.Rules;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Azure.Functions.Worker.Builder;
@@ -27,6 +28,7 @@ builder.Services.AddNotifications(
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ITodoistApi, CachedTodoistApi>();
+builder.Services.AddScoped<WeeklyReport>();
 
 builder.Services
     .AddRefitClient<ITodoistRawApi>(new RefitSettings

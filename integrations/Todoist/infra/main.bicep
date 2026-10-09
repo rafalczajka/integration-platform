@@ -11,6 +11,7 @@ param notificationsFunctionKeySecretName string
 param todoistApiKeySecretName string
 param todoistApiBaseUrl string
 param enforceRulesSchedule string
+param weeklyReportSchedule string
 param todoistRecurringProjectId string
 param timeZone string
 
@@ -43,6 +44,10 @@ module functionApp '../../../infrastructure/modules/functionApp.bicep' = {
       {
         name: 'EnforceRulesSchedule'
         value: enforceRulesSchedule
+      }
+      {
+        name: 'WeeklyReportSchedule'
+        value: weeklyReportSchedule
       }
       {
         name: 'TodoistProjectIds__Recurring'

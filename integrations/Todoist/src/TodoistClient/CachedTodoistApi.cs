@@ -18,6 +18,13 @@ internal sealed class CachedTodoistApi(
     private readonly ConcurrentDictionary<string, byte> _commentKeys = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _labelKeys = new(StringComparer.Ordinal);
 
+    public Task<TodoistCompletedTasksResponse> GetCompletedTasksByCompletionDateAsync(
+        string since,
+        string until,
+        string? cursor = null,
+        CancellationToken cancellationToken = default) =>
+        api.GetCompletedTasksByCompletionDateAsync(since, until, cursor, cancellationToken);
+
     public Task<TodoistResponse<TodoistLabel>> GetLabelsAsync(
         string? cursor = null,
         CancellationToken cancellationToken = default)

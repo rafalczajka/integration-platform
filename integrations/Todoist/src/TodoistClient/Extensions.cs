@@ -1,9 +1,26 @@
+using System.Globalization;
+
 namespace Integrations.Todoist.TodoistClient;
 
 internal static class Extensions
 {
     extension(ITodoistApi api)
     {
+        public Task<IEnumerable<TodoistCompletedTask>> GetCompletedTasksByCompletionDateAsync(
+            DateTimeOffset since,
+            DateTimeOffset until,
+            CancellationToken ct = default)
+        {
+            var sinceUtc = since.UtcDateTime.ToString("O", CultureInfo.InvariantCulture);
+            var untilUtc = until.UtcDateTime.ToString("O", CultureInfo.InvariantCulture);
+
+            return GetAllPagesAsync(async cursor =>
+            {
+                var response = await api.GetCompletedTasksByCompletionDateAsync(sinceUtc, untilUtc, cursor, ct);
+                return new TodoistResponse<TodoistCompletedTask>(response.Items, response.NextCursor);
+            });
+        }
+
         public Task<IEnumerable<TodoistLabel>> GetLabelsAsync(CancellationToken ct = default) =>
             GetAllPagesAsync(cursor => api.GetLabelsAsync(cursor, ct));
 

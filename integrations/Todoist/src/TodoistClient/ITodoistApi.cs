@@ -4,6 +4,13 @@ namespace Integrations.Todoist.TodoistClient;
 
 internal interface ITodoistApi
 {
+    [Get("/tasks/completed/by_completion_date?limit=200")]
+    Task<TodoistCompletedTasksResponse> GetCompletedTasksByCompletionDateAsync(
+        [Query] string since,
+        [Query] string until,
+        [Query] string? cursor = null,
+        CancellationToken cancellationToken = default);
+
     [Get("/labels?limit=200")]
     Task<TodoistResponse<TodoistLabel>> GetLabelsAsync(
         [Query] string? cursor = null,

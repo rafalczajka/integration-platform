@@ -9,6 +9,7 @@
     "TodoistApiBaseUrl": "https://api.todoist.com/api/v1",
     "TodoistApiKey": "",
     "EnforceRulesSchedule": "0 0 2 * * *",
+    "WeeklyReportSchedule": "0 0 6 * * 1",
     "TodoistProjectIds__Recurring": "",
     "Notifications__Enabled": "false",
     "Notifications__BaseUrl": "",
