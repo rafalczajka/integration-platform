@@ -43,7 +43,8 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
             BuildImportantTasks(tasks),
             BuildPriorities(tasks),
             BuildLabels(tasks),
-            BuildDays(tasks, sinceDate)
+            BuildDays(tasks, sinceDate),
+            BuildCompletedTasks(tasks)
         ];
 
         const int separatorLength = 60;
@@ -118,6 +119,21 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
 
         var nl = Environment.NewLine;
         return $"By day:{nl}{string.Join(nl, rows)}";
+    }
+
+    private static string BuildCompletedTasks(IReadOnlyCollection<CompletedTask> tasks)
+    {
+        const string header = "All completed tasks:";
+
+        if (tasks.Count == 0)
+            return $"{header}{Environment.NewLine}No tasks completed.";
+
+        var titles = tasks
+            .Select(task => task.Task.Content)
+            .OrderBy(title => title, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(title => title, StringComparer.Ordinal);
+
+        return NotificationFormatter.BuildNumberedListMessage(header, titles);
     }
 
     private sealed record CompletedTask(TodoistCompletedTask Task, DateOnly CompletedOn);
