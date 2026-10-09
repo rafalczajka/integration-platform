@@ -47,12 +47,7 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
             BuildCompletedTasks(tasks)
         ];
 
-        const int separatorLength = 60;
-        var nl = Environment.NewLine;
-
-        var separator = $"{nl}{nl}{new string('-', separatorLength)}{nl}{nl}";
-
-        return new WeeklyReportMessage(subject, string.Join(separator, sections));
+        return new WeeklyReportMessage(subject, NotificationFormatter.JoinSections(sections));
     }
 
     private static string BuildImportantTasks(IReadOnlyCollection<CompletedTask> tasks)

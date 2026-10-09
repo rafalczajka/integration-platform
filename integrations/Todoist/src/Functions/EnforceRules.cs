@@ -42,13 +42,7 @@ internal sealed class EnforceRules(
         if (!context.HasMessages) return;
 
         const string subject = "Todoist - rules notification";
-        const int separatorLength = 60;
-
-        var nl =  $"{Environment.NewLine}";
-        var separator = new string('-', separatorLength);
-        var fullSeparator = $"{nl}{nl}{separator}{nl}{nl}";
-
-        var body = string.Join(fullSeparator, context.Messages);
+        var body = NotificationFormatter.JoinSections(context.Messages);
         await notificationSender.SendAsync(subject, body, cancellationToken);
     }
 
