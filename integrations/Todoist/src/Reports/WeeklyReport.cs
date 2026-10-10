@@ -1,4 +1,3 @@
-using Integrations.Todoist.Rules;
 using Integrations.Todoist.TodoistClient;
 
 namespace Integrations.Todoist.Reports;
