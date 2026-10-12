@@ -90,12 +90,13 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
             .Select(group => $"{group.Key}: {group.Count()}")
             .ToList();
 
-        if (rows.Count == 0) rows.Add("No labeled tasks completed.");
+        if (rows.Count < 1) rows.Add("No labeled tasks completed.");
 
         var withoutLabels = tasks.Count(task => !task.Task.Labels.Any());
-        rows.Add($"Without labels: {withoutLabels}");
-        rows.Add("(a task with multiple labels is counted under each label)");
 
+        if (withoutLabels > 0) rows.Add($"Without labels: {withoutLabels}");
+
+        rows.Add("(a task with multiple labels is counted under each label)");
         return $"By label:{Environment.NewLine}{string.Join(Environment.NewLine, rows)}";
     }
 
