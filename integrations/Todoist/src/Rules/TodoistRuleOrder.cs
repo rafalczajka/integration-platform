@@ -16,6 +16,7 @@ internal static class TodoistRuleOrder
         typeof(NonSubtaskLabelRule),
         typeof(SubtaskDueDateRule),
         typeof(RecurringTaskInactiveLabelRule),
+        typeof(SomedayProjectLabelRule),
         typeof(UnusedLabelsCleanupRule),
         typeof(HighestPriorityTaskReportRule),
         typeof(UpcomingDeadlineTaskReportRule),

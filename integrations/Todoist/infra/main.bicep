@@ -13,6 +13,7 @@ param todoistApiBaseUrl string
 param enforceRulesSchedule string
 param weeklyReportSchedule string
 param todoistRecurringProjectId string
+param todoistSomedayProjectId string
 param timeZone string
 
 module functionApp '../../../infrastructure/modules/functionApp.bicep' = {
@@ -52,6 +53,10 @@ module functionApp '../../../infrastructure/modules/functionApp.bicep' = {
       {
         name: 'TodoistProjectIds__Recurring'
         value: todoistRecurringProjectId
+      }
+      {
+        name: 'TodoistProjectIds__Someday'
+        value: todoistSomedayProjectId
       }
     ]
     sharedAppServicePlanName: sharedAppServicePlanName

@@ -6,6 +6,9 @@ internal static class Extensions
 {
     extension(ITodoistApi api)
     {
+        public Task<IEnumerable<TodoistProject>> GetProjectsAsync(CancellationToken ct = default) =>
+            GetAllPagesAsync(cursor => api.GetProjectsAsync(cursor, ct));
+
         public Task<IEnumerable<TodoistCompletedTask>> GetCompletedTasksByCompletionDateAsync(
             DateTimeOffset since,
             DateTimeOffset until,

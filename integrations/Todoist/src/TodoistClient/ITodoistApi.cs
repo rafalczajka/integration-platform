@@ -4,6 +4,11 @@ namespace Integrations.Todoist.TodoistClient;
 
 internal interface ITodoistApi
 {
+    [Get("/projects?limit=200")]
+    Task<TodoistResponse<TodoistProject>> GetProjectsAsync(
+        [Query] string? cursor = null,
+        CancellationToken cancellationToken = default);
+
     [Get("/tasks/completed/by_completion_date?limit=200")]
     Task<TodoistCompletedTasksResponse> GetCompletedTasksByCompletionDateAsync(
         [Query] string since,
@@ -53,6 +58,11 @@ internal interface ITodoistApi
     [Post("/tasks/{taskId}")]
     Task UpdateTaskAsync(
         string taskId,
+        [Body] object request,
+        CancellationToken cancellationToken = default);
+
+    [Post("/labels")]
+    Task<TodoistLabel> CreateLabelAsync(
         [Body] object request,
         CancellationToken cancellationToken = default);
 

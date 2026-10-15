@@ -11,6 +11,7 @@
     "EnforceRulesSchedule": "0 0 2 * * *",
     "WeeklyReportSchedule": "0 0 6 * * 1",
     "TodoistProjectIds__Recurring": "",
+    "TodoistProjectIds__Someday": "",
     "Notifications__Enabled": "false",
     "Notifications__BaseUrl": "",
     "Notifications__FunctionKey": "",

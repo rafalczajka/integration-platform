@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Integrations.Todoist.TodoistClient;
 
 internal interface ITodoistItem
@@ -14,6 +12,11 @@ internal sealed record TodoistResponse<T>(
 internal sealed record TodoistCompletedTasksResponse(
     IEnumerable<TodoistCompletedTask> Items,
     string? NextCursor);
+
+internal sealed record TodoistProject(
+    string Id,
+    string Name,
+    string? ParentId) : ITodoistItem;
 
 internal sealed record TodoistCompletedTask(
     string Id,

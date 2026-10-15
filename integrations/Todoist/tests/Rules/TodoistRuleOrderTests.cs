@@ -1,4 +1,6 @@
 using Integrations.Todoist.Options;
+using Integrations.Todoist.Rules.Labels;
+using Integrations.Todoist.Rules.RecurringTasks;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -26,6 +28,17 @@ public sealed class TodoistRuleOrderTests
             TodoistRuleOrder.OrderedTypes.Distinct().Count());
     }
 
+    [Fact]
+    public void SomedayProjectLabelRule_ShouldRunAfterInactiveLabelsAndBeforeCleanup()
+    {
+        var orderedTypes = TodoistRuleOrder.OrderedTypes.ToList();
+
+        Assert.True(orderedTypes.IndexOf(typeof(RecurringTaskInactiveLabelRule))
+            < orderedTypes.IndexOf(typeof(SomedayProjectLabelRule)));
+        Assert.True(orderedTypes.IndexOf(typeof(SomedayProjectLabelRule))
+            < orderedTypes.IndexOf(typeof(UnusedLabelsCleanupRule)));
+    }
+
     private static ITodoistRule[] ResolveRules(ITodoistApi? todoist = null)
     {
         var services = new ServiceCollection();
@@ -33,7 +46,8 @@ public sealed class TodoistRuleOrderTests
         services.AddSingleton(
             Microsoft.Extensions.Options.Options.Create(new TodoistProjectIdsOptions
             {
-                Recurring = "test-project-id"
+                Recurring = "test-project-id",
+                Someday = "test-someday-project-id"
             }));
         services.AddSingleton(todoist ?? Substitute.For<ITodoistApi>());
         services.AddTodoistRules();

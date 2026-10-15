@@ -17,13 +17,24 @@ internal sealed class CachedTodoistApi(
     private readonly ConcurrentDictionary<string, byte> _taskKeys = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _commentKeys = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _labelKeys = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, byte> _projectKeys = new(StringComparer.Ordinal);
+
+    public Task<TodoistResponse<TodoistProject>> GetProjectsAsync(
+        string? cursor = null,
+        CancellationToken cancellationToken = default)
+    {
+        var key = $"projects:all:cursor:{GetCacheCursorKey(cursor)}";
+        return GetOrCreateAsync(key, _projectKeys, () => api.GetProjectsAsync(cursor, cancellationToken));
+    }
 
     public Task<TodoistCompletedTasksResponse> GetCompletedTasksByCompletionDateAsync(
         string since,
         string until,
         string? cursor = null,
-        CancellationToken cancellationToken = default) =>
-        api.GetCompletedTasksByCompletionDateAsync(since, until, cursor, cancellationToken);
+        CancellationToken cancellationToken = default)
+    {
+        return api.GetCompletedTasksByCompletionDateAsync(since, until, cursor, cancellationToken);
+    }
 
     public Task<TodoistResponse<TodoistLabel>> GetLabelsAsync(
         string? cursor = null,
@@ -92,6 +103,15 @@ internal sealed class CachedTodoistApi(
     {
         await api.UpdateTaskAsync(taskId, request, cancellationToken);
         InvalidateTaskEntries();
+    }
+
+    public async Task<TodoistLabel> CreateLabelAsync(
+        object request,
+        CancellationToken cancellationToken = default)
+    {
+        var label = await api.CreateLabelAsync(request, cancellationToken);
+        InvalidateLabelEntries();
+        return label;
     }
 
     public async Task DeleteLabelAsync(
