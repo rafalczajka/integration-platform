@@ -1,3 +1,4 @@
+using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
 
 namespace Integrations.Todoist.Reports;

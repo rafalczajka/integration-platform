@@ -1,3 +1,4 @@
+using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 using Refit;

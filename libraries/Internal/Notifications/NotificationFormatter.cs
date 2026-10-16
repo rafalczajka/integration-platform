@@ -1,6 +1,10 @@
-namespace Integrations.Todoist;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-internal static class NotificationFormatter
+namespace Integrations.Notifications;
+
+public static class NotificationFormatter
 {
     private const int SeparatorLength = 60;
 
