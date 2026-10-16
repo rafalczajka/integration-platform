@@ -1,9 +1,6 @@
-using System.Globalization;
-using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using Integrations.Todoist.Options;
 using Integrations.Todoist.TodoistClient;
+using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -74,7 +71,7 @@ internal sealed class SomedayProjectLabelRule(
 
         foreach (var project in projects)
         {
-            var label = ToKebabCase(project.Name);
+            var label = project.Name.ToAsciiSlug();
 
             if (TryGetInvalidLabelReason(label, out var invalidLabelReason))
             {
@@ -197,19 +194,6 @@ internal sealed class SomedayProjectLabelRule(
 
             foreach (var child in children[project.Id]) pending.Enqueue(child);
         }
-    }
-
-    private static string ToKebabCase(string projectName)
-    {
-        var decomposed = projectName.Normalize(NormalizationForm.FormD)
-            .Replace('\u0141', 'L')
-            .Replace('\u0142', 'l');
-
-        var name = string.Concat(decomposed.Where(character =>
-            CharUnicodeInfo.GetUnicodeCategory(character) != UnicodeCategory.NonSpacingMark));
-
-        var kebabName = JsonNamingPolicy.KebabCaseLower.ConvertName(name);
-        return Regex.Replace(kebabName, "[^a-z0-9]+", "-").Trim('-');
     }
 
     private static bool TryGetInvalidLabelReason(string label, out string? invalidLabelReason)

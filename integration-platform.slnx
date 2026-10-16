@@ -29,6 +29,8 @@
     <Project Path="libraries/Internal/Options/Options.csproj" />
     <Project Path="libraries/Internal/Options.Generator/Options.Generator.csproj" />
     <Project Path="libraries/Internal/Telemetry/Telemetry.csproj" />
+    <Project Path="libraries/Internal/Utils/Utils.csproj" />
+    <Project Path="libraries/Internal/Utils.Tests/Utils.Tests.csproj" />
   </Folder>
   <Folder Name="/libraries/">
     <File Path="libraries/Directory.Build.props" />

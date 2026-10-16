@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Integrations.Utils</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <Version>0.0.0</Version>
+  </PropertyGroup>
+
+</Project>
