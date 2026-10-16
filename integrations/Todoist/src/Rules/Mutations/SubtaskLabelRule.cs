@@ -3,7 +3,7 @@ using Integrations.Todoist.TodoistClient;
 using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace Integrations.Todoist.Rules.Subtasks;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Enforces that subtasks have only the subtask label and propagates any other

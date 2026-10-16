@@ -1,11 +1,11 @@
 using System;
 using System.Net;
-using Integrations.Todoist.Rules.BlockedTasks;
+using Integrations.Todoist.Rules.Mutations;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace Integrations.Todoist.Tests.Rules.BlockedTasks;
+namespace Integrations.Todoist.Tests.Rules.Mutations;
 
 public sealed class BlockedTaskCommentRuleTests
 {

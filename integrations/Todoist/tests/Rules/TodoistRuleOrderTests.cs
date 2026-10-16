@@ -1,6 +1,5 @@
 using Integrations.Todoist.Options;
-using Integrations.Todoist.Rules.Labels;
-using Integrations.Todoist.Rules.RecurringTasks;
+using Integrations.Todoist.Rules.Mutations;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;

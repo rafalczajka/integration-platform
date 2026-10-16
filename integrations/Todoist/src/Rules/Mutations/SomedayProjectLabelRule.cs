@@ -5,7 +5,7 @@ using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Integrations.Todoist.Rules.Labels;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Adds the direct project's name as a label to top-level tasks in Someday and its subprojects.

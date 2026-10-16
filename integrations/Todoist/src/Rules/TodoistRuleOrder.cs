@@ -1,9 +1,5 @@
-using Integrations.Todoist.Rules.BlockedTasks;
-using Integrations.Todoist.Rules.Deadlines;
-using Integrations.Todoist.Rules.Labels;
-using Integrations.Todoist.Rules.Priorities;
-using Integrations.Todoist.Rules.RecurringTasks;
-using Integrations.Todoist.Rules.Subtasks;
+using Integrations.Todoist.Rules.Mutations;
+using Integrations.Todoist.Rules.ReadOnly;
 
 namespace Integrations.Todoist.Rules;
 

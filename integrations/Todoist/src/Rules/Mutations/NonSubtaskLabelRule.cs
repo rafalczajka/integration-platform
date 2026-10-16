@@ -2,7 +2,7 @@ using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 
-namespace Integrations.Todoist.Rules.Subtasks;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Removes the subtask label from tasks that are not subtasks but have it assigned.

@@ -2,7 +2,7 @@ using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 
-namespace Integrations.Todoist.Rules.BlockedTasks;
+namespace Integrations.Todoist.Rules.ReadOnly;
 
 /// <summary>
 /// Reports tasks that are currently marked as blocked and their blockers.

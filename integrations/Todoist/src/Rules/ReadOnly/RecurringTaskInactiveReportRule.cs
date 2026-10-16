@@ -4,7 +4,7 @@ using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Integrations.Todoist.Rules.RecurringTasks;
+namespace Integrations.Todoist.Rules.ReadOnly;
 
 /// <summary>
 /// Reports inactive tasks in the Recurring project.

@@ -1,7 +1,7 @@
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 
-namespace Integrations.Todoist.Rules.Labels;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Deletes labels that are not assigned to any task.

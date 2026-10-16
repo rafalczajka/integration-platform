@@ -5,7 +5,7 @@ using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Integrations.Todoist.Rules.RecurringTasks;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Ensures tasks in the Recurring project follow inactive label rules:

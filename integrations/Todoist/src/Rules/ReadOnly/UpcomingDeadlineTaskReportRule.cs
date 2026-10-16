@@ -2,7 +2,7 @@ using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 
-namespace Integrations.Todoist.Rules.Deadlines;
+namespace Integrations.Todoist.Rules.ReadOnly;
 
 /// <summary>
 /// Reports tasks with a deadline ending within the next week.

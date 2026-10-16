@@ -3,7 +3,7 @@ using Integrations.Todoist.TodoistClient;
 using Microsoft.Extensions.Logging;
 using Refit;
 
-namespace Integrations.Todoist.Rules.BlockedTasks;
+namespace Integrations.Todoist.Rules.Mutations;
 
 /// <summary>
 /// Validates that blocked tasks have blocker comments pointing to Todoist task URLs.
