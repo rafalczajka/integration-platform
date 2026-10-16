@@ -1,6 +1,7 @@
 using Integrations.Notifications;
 using Integrations.Todoist.Options;
 using Integrations.Todoist.TodoistClient;
+using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -77,7 +78,7 @@ internal sealed class RecurringTaskInactiveLabelRule(
         IDictionary<string, IReadOnlyCollection<string>> labelsToUpdate,
         List<TodoistTask> tasksWithNonRecurringDueDate)
     {
-        var labels = GetLabelsSnapshot(task.Labels);
+        var labels = task.Labels.AsReadOnlyCollection();
         var due = task.Due;
 
         if (due is null)
@@ -115,11 +116,6 @@ internal sealed class RecurringTaskInactiveLabelRule(
 
         logger.LogInformation("Updated labels for {UpdatedCount} tasks.", updatedCount);
         return tasksToUpdate;
-    }
-
-    private static IReadOnlyCollection<string> GetLabelsSnapshot(IEnumerable<string> labels)
-    {
-        return labels as IReadOnlyCollection<string> ?? [.. labels];
     }
 
     private static void ApplyInactiveLabelOnly(

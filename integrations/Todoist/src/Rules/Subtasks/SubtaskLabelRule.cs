@@ -1,5 +1,6 @@
 using Integrations.Notifications;
 using Integrations.Todoist.TodoistClient;
+using Integrations.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Integrations.Todoist.Rules.Subtasks;
@@ -35,7 +36,7 @@ internal sealed class SubtaskLabelRule(
 
         foreach (var task in subtasks)
         {
-            var labels = GetLabelsSnapshot(task.Labels);
+            var labels = task.Labels.AsReadOnlyCollection();
             var shouldResetLabels = !HasOnlySubtaskLabel(labels);
 
             if (!shouldResetLabels) continue;
@@ -155,11 +156,6 @@ internal sealed class SubtaskLabelRule(
             .Concat(subtaskLabels)
             .Distinct()
             .Where(label => !IsSubtaskLabel(label))];
-    }
-
-    private static IReadOnlyCollection<string> GetLabelsSnapshot(IEnumerable<string> labels)
-    {
-        return labels as IReadOnlyCollection<string> ?? [.. labels];
     }
 
     private static bool HasOnlySubtaskLabel(IReadOnlyCollection<string> labels)
