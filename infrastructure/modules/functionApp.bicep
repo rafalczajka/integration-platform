@@ -17,7 +17,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing 
   name: sharedStorageAccountName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2026-02-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2026-05-15' existing = {
   name: sharedKeyVaultName
 }
 
@@ -89,7 +89,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   }
 }
 
-resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2026-02-01' = {
+resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2026-05-15' = {
   name: 'add'
   parent: keyVault
   properties: {

@@ -14,7 +14,7 @@ module storageAccount '../modules/storageAccount.bicep' = {
   }
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2026-02-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2026-05-15' = {
   name: getUniqueResourceName('kv', name)
   location: location
   properties: {
