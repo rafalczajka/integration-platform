@@ -1,4 +1,5 @@
 using Integrations.Todoist.Rules.Mutations;
+using Integrations.Todoist.Rules.Mutations.BlockedTaskCommentRule;
 using Integrations.Todoist.Rules.ReadOnly;
 
 namespace Integrations.Todoist.Rules;

@@ -1,3 +1,4 @@
+using Integrations.Todoist.Rules.Mutations.BlockedTaskCommentRule;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Integrations.Todoist.Rules;
@@ -6,6 +7,8 @@ internal static class Extensions
 {
     public static IServiceCollection AddTodoistRules(this IServiceCollection services)
     {
+        services.AddScoped<BlockerLabelSynchronizer>();
+
         var ruleType = typeof(ITodoistRule);
 
         var ruleTypes = ruleType.Assembly.GetTypes()
