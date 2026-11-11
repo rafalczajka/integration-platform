@@ -42,60 +42,28 @@ internal static class Extensions
         public Task<IEnumerable<TodoistComment>> GetCommentsByTaskAsync(string taskId, CancellationToken ct = default) =>
             GetAllPagesAsync(cursor => api.GetCommentsByTaskAsync(taskId, cursor, ct));
 
-        public async Task<int> UpdateTasksAsync(
+        public Task<int> UpdateTasksAsync(
             IEnumerable<TodoistTask> tasks,
             Func<TodoistTask, object> createRequestBody,
             int concurrentRequests = 5,
             CancellationToken cancellationToken = default)
         {
-            using var semaphore = new SemaphoreSlim(concurrentRequests);
-            var updateCounter = 0;
-
-            var apiCallTasks = tasks.Select(async task =>
-            {
-                await semaphore.WaitAsync(cancellationToken);
-
-                try
-                {
-                    var updateRequest = createRequestBody(task);
-                    await api.UpdateTaskAsync(task.Id, updateRequest, cancellationToken);
-                    Interlocked.Increment(ref updateCounter);
-                }
-                finally
-                {
-                    semaphore.Release();
-                }
-            });
-
-            await Task.WhenAll(apiCallTasks);
-            return updateCounter;
+            return ExecuteInParallelAsync(
+                tasks,
+                (task, ct) => api.UpdateTaskAsync(task.Id, createRequestBody(task), ct),
+                concurrentRequests, cancellationToken);
         }
 
-        public async Task<int> DeleteLabelsAsync(
+        public Task<int> DeleteLabelsAsync(
             IEnumerable<TodoistLabel> labels,
             int concurrentRequests = 5,
             CancellationToken cancellationToken = default)
         {
-            using var semaphore = new SemaphoreSlim(concurrentRequests);
-            var deleteCounter = 0;
-
-            var apiCallTasks = labels.Select(async label =>
-            {
-                await semaphore.WaitAsync(cancellationToken);
-
-                try
-                {
-                    await api.DeleteLabelAsync(label.Id, cancellationToken);
-                    Interlocked.Increment(ref deleteCounter);
-                }
-                finally
-                {
-                    semaphore.Release();
-                }
-            });
-
-            await Task.WhenAll(apiCallTasks);
-            return deleteCounter;
+            return ExecuteInParallelAsync(
+                labels,
+                (label, ct) => api.DeleteLabelAsync(label.Id, ct),
+                concurrentRequests,
+                cancellationToken);
         }
 
         private static async Task<IEnumerable<T>> GetAllPagesAsync<T>(
@@ -113,5 +81,30 @@ internal static class Extensions
 
             return items;
         }
+    }
+
+    private static async Task<int> ExecuteInParallelAsync<T>(
+        IEnumerable<T> items,
+        Func<T, CancellationToken, Task> execute,
+        int concurrentRequests,
+        CancellationToken cancellationToken)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(concurrentRequests);
+
+        var options = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = concurrentRequests,
+            CancellationToken = cancellationToken
+        };
+
+        var completedCount = 0;
+
+        await Parallel.ForEachAsync(items, options, async (item, ct) =>
+        {
+            await execute(item, ct);
+            Interlocked.Increment(ref completedCount);
+        });
+
+        return completedCount;
     }
 }

@@ -10,10 +10,9 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sinceDate = today.AddDays(-7);
-        var untilDate = today;
 
         var since = new DateTimeOffset(sinceDate.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
-        var until = new DateTimeOffset(untilDate.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
+        var until = new DateTimeOffset(today.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
 
         var response = await todoist.GetCompletedTasksByCompletionDateAsync(since, until, cancellationToken);
 
@@ -31,7 +30,7 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
             .Select(t => new { t, completedOn = DateOnly.FromDateTime(t.completedAt.UtcDateTime) })
             .Select(t => new CompletedTask(t.t.task, t.completedOn)).ToList();
 
-        var lastDate = untilDate.AddDays(-1);
+        var lastDate = today.AddDays(-1);
         var subject = $"Todoist - weekly tasks report ({sinceDate:yyyy-MM-dd} - {lastDate:yyyy-MM-dd})";
 
         string[] sections =
@@ -70,9 +69,13 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
 
     private static string BuildPriorities(IReadOnlyCollection<CompletedTask> tasks)
     {
+        var counts = tasks
+            .CountBy(task => task.Task.Priority)
+            .ToDictionary();
+
         var rows = Enumerable.Range(1, 4).Select(priority =>
         {
-            var count = tasks.Count(task => task.Task.Priority == 5 - priority);
+            var count = counts.GetValueOrDefault(5 - priority);
             var percentage = tasks.Count == 0 ? 0M : count * 100M / tasks.Count;
             return $"P{priority}: {count} ({percentage:F1}%)";
         });
@@ -84,11 +87,11 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
     {
         var rows = tasks
             .SelectMany(task => task.Task.Labels.Distinct(StringComparer.Ordinal))
-            .GroupBy(label => label, StringComparer.Ordinal)
-            .OrderByDescending(group => group.Count())
-            .ThenBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(group => group.Key, StringComparer.Ordinal)
-            .Select(group => $"{group.Key}: {group.Count()}")
+            .CountBy(label => label, StringComparer.Ordinal)
+            .OrderByDescending(entry => entry.Value)
+            .ThenBy(entry => entry.Key, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(entry => entry.Key, StringComparer.Ordinal)
+            .Select(entry => $"{entry.Key}: {entry.Value}")
             .ToList();
 
         if (rows.Count < 1) rows.Add("No labeled tasks completed.");
@@ -103,13 +106,14 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
 
     private static string BuildDays(IReadOnlyCollection<CompletedTask> tasks, DateOnly sinceDate)
     {
-        var counts = Enumerable.Range(0, 7)
-            .Select(day => tasks.Count(task => task.CompletedOn == sinceDate.AddDays(day)))
-            .ToArray();
+        var counts = tasks
+            .CountBy(task => task.CompletedOn)
+            .ToDictionary();
 
-        var rows = counts.Select((count, day) =>
+        var rows = Enumerable.Range(0, 7).Select(day =>
         {
             var date = sinceDate.AddDays(day);
+            var count = counts.GetValueOrDefault(date);
             return $"{date.DayOfWeek} | {date:yyyy-MM-dd}: {count}";
         });
 
