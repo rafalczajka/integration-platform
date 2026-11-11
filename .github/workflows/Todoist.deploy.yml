@@ -9,6 +9,7 @@ on:
       - 'infrastructure/modules/**'
       - 'infrastructure/lib/**'
       - 'Directory.*.props'
+      - 'Directory.*.targets'
       - 'global.json'
 
   workflow_dispatch:
