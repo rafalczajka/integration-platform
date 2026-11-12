@@ -15,6 +15,7 @@ on:
 
 concurrency:
   group: integration-platform-deploy
+  queue: max
   cancel-in-progress: false
 
 jobs:
