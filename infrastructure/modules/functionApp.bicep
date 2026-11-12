@@ -48,6 +48,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
+      use32BitWorkerProcess: false
       cors: {
         allowedOrigins: [
           'https://portal.azure.com'
