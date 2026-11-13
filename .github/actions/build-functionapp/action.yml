@@ -1,0 +1,50 @@
+name: Build Function App
+description: Build, test, publish, and package an integration.
+inputs:
+  integration-directory:
+    description: Directory containing the integration solution and src folder.
+    required: true
+  github-token:
+    description: Token used to restore dependencies from GitHub Packages.
+    required: true
+outputs:
+  package-path:
+    description: Path to the generated deployment ZIP file.
+    value: ${{ steps.package.outputs.package-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+
+    - name: NuGet auth and restore
+      uses: $/.github/actions/nuget-auth-restore
+      with:
+        github-token: ${{ inputs.github-token }}
+        working-directory: ${{ inputs.integration-directory }}
+
+    - name: Build
+      shell: bash
+      working-directory: ${{ inputs.integration-directory }}
+      run: dotnet build -c Release --no-restore
+
+    - name: Test
+      shell: bash
+      working-directory: ${{ inputs.integration-directory }}
+      run: dotnet test -c Release --no-build
+
+    - name: Publish
+      shell: bash
+      working-directory: ${{ inputs.integration-directory }}/src
+      run: dotnet publish -c Release --no-build -o ./publish
+
+    - name: Package function app
+      id: package
+      shell: bash
+      working-directory: ${{ inputs.integration-directory }}/src/publish
+      env:
+        PACKAGE_PATH: ${{ runner.temp }}/functionapp.zip
+      run: |
+        zip -r "$PACKAGE_PATH" .
+        echo "package-path=$PACKAGE_PATH" >> "$GITHUB_OUTPUT"

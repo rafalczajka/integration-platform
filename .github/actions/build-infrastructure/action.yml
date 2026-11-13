@@ -1,0 +1,17 @@
+name: Build Bicep Infrastructure
+description: Compile Bicep infrastructure and parameters.
+inputs:
+  infra-directory:
+    description: Directory containing main.bicep and main.bicepparam.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Build Bicep
+      shell: bash
+      working-directory: ${{ inputs.infra-directory }}
+      run: |
+        az bicep install
+        az bicep build -f main.bicep
+        az bicep build-params -f main.bicepparam --outfile parameters.json

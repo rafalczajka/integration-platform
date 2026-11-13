@@ -4,6 +4,8 @@ on:
   push:
     branches: [ main ]
     paths:
+      - '.github/actions/**'
+      - '.github/workflows/_reusable.deploy-integration.yml'
       - 'integrations/Todoist/infra/**'
       - 'integrations/Todoist/src/**'
       - 'infrastructure/modules/**'
@@ -20,8 +22,8 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: R05 Build and Deploy Integration
-    uses: ./.github/workflows/_R05.deploy-integration.yml
+    name: Build and Deploy Integration
+    uses: $/.github/workflows/_reusable.deploy-integration.yml
     with:
       infra-directory: ./integrations/Todoist/infra
       integration-directory: ./integrations/Todoist

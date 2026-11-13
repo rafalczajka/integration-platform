@@ -9,16 +9,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-infrastructure:
-    name: R01 Build Bicep Infrastructure
-    uses: ./.github/workflows/_R01.build-infra.yml
-    with:
-      infra-directory: ./infrastructure/shared
-
   deploy-infrastructure:
-    name: R02 Deploy Infrastructure
-    needs: [build-infrastructure]
-    uses: ./.github/workflows/_R02.deploy-infra.yml
-    secrets:
-      azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-      azure-resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+    name: Build and Deploy Infrastructure
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Build infrastructure
+        uses: $/.github/actions/build-infrastructure
+        with:
+          infra-directory: ./infrastructure/shared
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy infrastructure
+        uses: $/.github/actions/deploy-infrastructure
+        with:
+          infra-directory: ./infrastructure/shared
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
