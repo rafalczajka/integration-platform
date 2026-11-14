@@ -1,3 +1,4 @@
+using System.Linq;
 using Integrations.Contracts.Gmail;
 using Integrations.Gmail.Services;
 using Microsoft.AspNetCore.Http;
@@ -19,18 +20,9 @@ internal sealed class SendEmail(
         [FromBody] SendEmailRequest request,
         CancellationToken cancellationToken)
     {
-        if (!string.IsNullOrWhiteSpace(request.To)) // TODO: Add a list of allowed recipients to config
-            return Results.BadRequest();
+        var (recipients, error) = GetAndValidateRecipients(request.To);
 
-        var recipientAddresses = string.IsNullOrWhiteSpace(request.To)
-            ? options.Value.From
-            : request.To;
-
-        if (!TryParseRecipients(recipientAddresses, out var recipients))
-        {
-            logger.LogError("Invalid email recipients.");
-            return TypedResults.BadRequest();
-        }
+        if (error is not null) return error;
 
         try
         {
@@ -48,6 +40,37 @@ internal sealed class SendEmail(
         }
 
         return Results.Accepted("Email sent.");
+    }
+
+    private (List<MailboxAddress> Recipients, IResult? Error) GetAndValidateRecipients(string? to)
+    {
+        var recipientAddresses = string.IsNullOrWhiteSpace(to)
+            ? options.Value.From
+            : to;
+
+        if (!TryParseRecipients(recipientAddresses, out var recipients))
+        {
+            logger.LogError("Invalid email recipients.");
+            return ([], TypedResults.BadRequest());
+        }
+
+        if (!TryParseRecipients(options.Value.AllowedRecipients, out var allowedRecipients))
+        {
+            logger.LogError("Invalid allowed email recipients configuration.");
+            return ([], Results.InternalServerError());
+        }
+
+        var allowedAddresses = allowedRecipients
+            .Select(recipient => recipient.Address)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (recipients.Any(recipient => !allowedAddresses.Contains(recipient.Address)))
+        {
+            logger.LogWarning("Email recipients include an address outside the allowed recipients list.");
+            return ([], Results.BadRequest());
+        }
+
+        return (recipients, null);
     }
 
     private static bool TryParseRecipients(string? value, out List<MailboxAddress> recipients)

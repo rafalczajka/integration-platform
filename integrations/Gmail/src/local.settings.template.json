@@ -11,6 +11,7 @@
     "Smtp__Password": "",
     "Smtp__From": "<email-address>",
     "Smtp__FromName": "Integration Platform",
+    "Smtp__AllowedRecipients": "<email-address>",
     "Smtp__UseSsl": "false"
   }
 }
