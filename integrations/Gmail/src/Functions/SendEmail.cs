@@ -22,11 +22,11 @@ internal sealed class SendEmail(
         if (!string.IsNullOrWhiteSpace(request.To)) // TODO: Add a list of allowed recipients to config
             return Results.BadRequest();
 
-        var recipientsStr = string.IsNullOrWhiteSpace(request.To)
+        var recipientAddresses = string.IsNullOrWhiteSpace(request.To)
             ? options.Value.From
             : request.To;
 
-        if (!TryParseRecipients(recipientsStr, out var recipients))
+        if (!TryParseRecipients(recipientAddresses, out var recipients))
         {
             logger.LogError("Invalid email recipients.");
             return TypedResults.BadRequest();
