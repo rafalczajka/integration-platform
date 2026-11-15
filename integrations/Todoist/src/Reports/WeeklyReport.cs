@@ -20,6 +20,7 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
         var taskIds = new HashSet<string>(StringComparer.Ordinal);
 
         var tasks = response.Where(task => task.Due?.IsRecurring != true)
+            .Where(task => !HasOnlyPersonalLabel(task.Labels))
             .Select(task => new
             {
                 task,
@@ -38,7 +39,7 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
         [
             $"""
              Completed tasks ({sinceDate:yyyy-MM-dd} - {lastDate:yyyy-MM-dd}): {tasks.Count}
-             (recurring tasks are excluded)
+             (recurring tasks and quick-add tasks are excluded)
              """,
             BuildImportantTasks(tasks),
             BuildPriorities(tasks),
@@ -48,6 +49,21 @@ internal sealed class WeeklyReport(ITodoistApi todoist)
         ];
 
         return new WeeklyReportMessage(subject, NotificationFormatter.JoinSections(sections));
+    }
+
+    private static bool HasOnlyPersonalLabel(IEnumerable<string> labels)
+    {
+        var hasPersonalLabel = false;
+
+        foreach (var label in labels)
+        {
+            if (!string.Equals(label, Labels.Personal, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            hasPersonalLabel = true;
+        }
+
+        return hasPersonalLabel;
     }
 
     private static string BuildImportantTasks(IReadOnlyCollection<CompletedTask> tasks)

@@ -18,15 +18,15 @@ internal sealed class BlockedTaskReportRule(
     /// <seealso cref="BlockedTaskReportRule" />
     public async Task ExecuteAsync(TodoistRuleContext context, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Fetching tasks with the {Label} label for blocked task report...", Constants.BlockedLabel);
+        logger.LogInformation("Fetching tasks with the {Label} label for blocked task report...", Labels.Blocked);
 
         var blockedTasks = (await todoist.GetTasksByFilterAsync(BlockedFilter, cancellationToken))
             .OrderBy(task => task.Content, StringComparer.OrdinalIgnoreCase)
             .ThenBy(task => task.Id, StringComparer.Ordinal)
             .ToArray();
-        TodoistGuards.EnsureAllTasksContainLabel(blockedTasks, Constants.BlockedLabel, nameof(BlockedTaskReportRule));
+        TodoistGuards.EnsureAllTasksContainLabel(blockedTasks, Labels.Blocked, nameof(BlockedTaskReportRule));
 
-        logger.LogInformation("Fetching tasks with the {Label} label for blocker task report...", Constants.BlockerLabel);
+        logger.LogInformation("Fetching tasks with the {Label} label for blocker task report...", Labels.Blocker);
 
         var blockerTasks = (await todoist.GetTasksByFilterAsync(BlockerFilter, cancellationToken))
             .OrderBy(task => task.Content, StringComparer.OrdinalIgnoreCase)
@@ -34,7 +34,7 @@ internal sealed class BlockedTaskReportRule(
             .ToArray();
         TodoistGuards.EnsureAllTasksContainLabel(
             blockerTasks,
-            Constants.BlockerLabel,
+            Labels.Blocker,
             $"{nameof(BlockedTaskReportRule)} blocker fetch");
 
         if (blockedTasks.Length == 0 && blockerTasks.Length == 0)

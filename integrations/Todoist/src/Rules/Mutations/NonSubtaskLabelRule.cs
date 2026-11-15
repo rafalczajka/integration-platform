@@ -44,7 +44,7 @@ internal sealed class NonSubtaskLabelRule(
         if (updatedCount > 0)
         {
             context.AddMessage(NotificationFormatter.BuildNumberedListMessage(
-                $"Removed '{Constants.SubtaskLabel}' label from {updatedCount} non-subtasks:",
+                $"Removed '{Labels.Subtask}' label from {updatedCount} non-subtasks:",
                 tasks.Select(task => task.Content)));
         }
     }
@@ -53,13 +53,13 @@ internal sealed class NonSubtaskLabelRule(
     {
         var tasks = (await todoist.GetTasksByFilterAsync(NonSubtaskWithSubtaskLabelFilter, cancellationToken)).ToArray();
         TodoistGuards.EnsureAllTasksAreTopLevel(tasks, nameof(NonSubtaskLabelRule));
-        TodoistGuards.EnsureAllTasksContainLabel(tasks, Constants.SubtaskLabel, nameof(NonSubtaskLabelRule));
+        TodoistGuards.EnsureAllTasksContainLabel(tasks, Labels.Subtask, nameof(NonSubtaskLabelRule));
 
         return [.. tasks];
     }
 
     private static bool IsSubtaskLabel(string label)
     {
-        return string.Equals(label, Constants.SubtaskLabel, StringComparison.Ordinal);
+        return string.Equals(label, Labels.Subtask, StringComparison.Ordinal);
     }
 }

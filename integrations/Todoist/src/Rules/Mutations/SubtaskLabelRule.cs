@@ -41,7 +41,7 @@ internal sealed class SubtaskLabelRule(
 
             if (!shouldResetLabels) continue;
 
-            subtaskLabelUpdates[task.Id] = [Constants.SubtaskLabel];
+            subtaskLabelUpdates[task.Id] = [Labels.Subtask];
             AddLabelsToParent(parentLabelsToAdd, task.ParentId, labels);
         }
 
@@ -51,7 +51,7 @@ internal sealed class SubtaskLabelRule(
         if (updatedSubtasks.Count > 0)
         {
             context.AddMessage(NotificationFormatter.BuildNumberedListMessage(
-                $"Reset labels to only '{Constants.SubtaskLabel}' for {updatedSubtasks.Count} subtasks:",
+                $"Reset labels to only '{Labels.Subtask}' for {updatedSubtasks.Count} subtasks:",
                 updatedSubtasks.Select(task => task.Content)));
         }
 
@@ -165,6 +165,6 @@ internal sealed class SubtaskLabelRule(
 
     private static bool IsSubtaskLabel(string label)
     {
-        return string.Equals(label, Constants.SubtaskLabel, StringComparison.Ordinal);
+        return string.Equals(label, Labels.Subtask, StringComparison.Ordinal);
     }
 }

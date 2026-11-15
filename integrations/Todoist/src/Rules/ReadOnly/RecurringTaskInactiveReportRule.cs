@@ -56,6 +56,6 @@ internal sealed class RecurringTaskInactiveReportRule(
 
     private static bool IsInactiveLabel(string label)
     {
-        return string.Equals(label, Constants.InactiveLabel, StringComparison.OrdinalIgnoreCase);
+        return string.Equals(label, Labels.Inactive, StringComparison.OrdinalIgnoreCase);
     }
 }

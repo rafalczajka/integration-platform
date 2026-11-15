@@ -124,7 +124,7 @@ internal sealed class RecurringTaskInactiveLabelRule(
         IDictionary<string, IReadOnlyCollection<string>> labelsToUpdate)
     {
         if (HasOnlyInactiveLabel(labels)) return;
-        labelsToUpdate[task.Id] = [Constants.InactiveLabel];
+        labelsToUpdate[task.Id] = [Labels.Inactive];
     }
 
     private static void RemoveInactiveLabel(
@@ -153,7 +153,7 @@ internal sealed class RecurringTaskInactiveLabelRule(
 
     private static bool IsInactiveLabel(string label)
     {
-        return string.Equals(label, Constants.InactiveLabel, StringComparison.OrdinalIgnoreCase);
+        return string.Equals(label, Labels.Inactive, StringComparison.OrdinalIgnoreCase);
     }
 
     private void ReportNonRecurringDueDates(

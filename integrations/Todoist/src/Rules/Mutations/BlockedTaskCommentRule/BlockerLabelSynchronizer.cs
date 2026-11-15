@@ -14,14 +14,14 @@ internal sealed class BlockerLabelSynchronizer(
         IReadOnlyCollection<BlockerReference> references,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Fetching tasks with the {Label} label...", Constants.BlockerLabel);
+        logger.LogInformation("Fetching tasks with the {Label} label...", Labels.Blocker);
 
-        var currentBlockers = (await todoist.GetTasksByFilterAsync($"@{Constants.BlockerLabel}", cancellationToken)).ToArray();
+        var currentBlockers = (await todoist.GetTasksByFilterAsync($"@{Labels.Blocker}", cancellationToken)).ToArray();
 
         TodoistGuards.EnsureAllTasksContainLabel(
             currentBlockers,
-            Constants.BlockerLabel,
-            $"{nameof(BlockedTaskCommentRule)} @{Constants.BlockerLabel} fetch");
+            Labels.Blocker,
+            $"{nameof(BlockedTaskCommentRule)} @{Labels.Blocker} fetch");
 
         var desiredBlockers = new List<TodoistTask>();
         var invalidReferences = new List<BlockerReference>();
@@ -51,7 +51,7 @@ internal sealed class BlockerLabelSynchronizer(
             .ToHashSet(StringComparer.Ordinal);
 
         var toAdd = desiredBlockers
-            .Where(task => !task.Labels.Contains(Constants.BlockerLabel, StringComparer.OrdinalIgnoreCase))
+            .Where(task => !task.Labels.Contains(Labels.Blocker, StringComparer.OrdinalIgnoreCase))
             .ToArray();
 
         var toRemove = currentBlockers
@@ -73,14 +73,14 @@ internal sealed class BlockerLabelSynchronizer(
         if (tasks.Count == 0) return;
 
         logger.LogInformation("Updating {Label} label for {TaskCount} tasks (add: {Add})...",
-            Constants.BlockerLabel, tasks.Count, add);
+            Labels.Blocker, tasks.Count, add);
 
         await todoist.UpdateTasksAsync(tasks, task => new
         {
             labels = add
-                ? task.Labels.Append(Constants.BlockerLabel).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()
+                ? task.Labels.Append(Labels.Blocker).Distinct(StringComparer.OrdinalIgnoreCase).ToArray()
                 : task.Labels.Where(label => !string.Equals(
-                    label, Constants.BlockerLabel, StringComparison.OrdinalIgnoreCase)).ToArray()
+                    label, Labels.Blocker, StringComparison.OrdinalIgnoreCase)).ToArray()
         }, cancellationToken: cancellationToken);
     }
 
