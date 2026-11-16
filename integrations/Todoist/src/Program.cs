@@ -3,7 +3,7 @@ using Integrations.Notifications;
 using Integrations.Options;
 using Integrations.Telemetry;
 using Integrations.Todoist.Options;
-using Integrations.Todoist.Reports;
+using Integrations.Todoist.Report;
 using Integrations.Todoist.Rules;
 using Integrations.Todoist.TodoistClient;
 using Microsoft.Azure.Functions.Worker.Builder;
