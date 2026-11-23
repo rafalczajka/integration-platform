@@ -14,8 +14,6 @@ updates:
       - github-packages
     schedule:
       interval: weekly
-    ignore:
-      - dependency-name: Microsoft.ApplicationInsights.WorkerService
     groups:
       nuget:
         patterns:
