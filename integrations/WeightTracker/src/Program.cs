@@ -17,7 +17,7 @@ builder.Services.AddNotifications(
     optionsSectionName: "Notifications");
 
 builder.Services
-    .AddRefitGeneratedClient<IWeightTrackerApi>()
+    .AddRefitGeneratedClient<IWeightTrackerApi>(RefitSettings.ForJsonContext(ApiJsonContext.Default))
     .ConfigureHttpClient(client =>
     {
         var config = builder.Configuration;
