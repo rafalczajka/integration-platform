@@ -3,14 +3,9 @@ name: Shared - Deploy Infrastructure
 on:
   workflow_dispatch:
 
-concurrency:
-  group: integration-platform-deploy
-  queue: max
-  cancel-in-progress: false
-
 jobs:
-  deploy-infrastructure:
-    name: Build and Deploy Infrastructure
+  build-infrastructure:
+    name: Build Shared Infrastructure
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,6 +18,32 @@ jobs:
         with:
           infra-directory: ./infrastructure/shared
 
+      - name: Upload infrastructure artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: infra
+          path: |
+            infrastructure/shared/main.json
+            infrastructure/shared/parameters.json
+          if-no-files-found: error
+
+  deploy-infrastructure:
+    name: Deploy Shared Infrastructure
+    needs: [build-infrastructure]
+    concurrency:
+      group: integration-platform-deploy
+      queue: max
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Download infrastructure artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: infra
+          path: infra
+
       - name: Azure login
         uses: azure/login@v3
         with:
@@ -31,5 +52,5 @@ jobs:
       - name: Deploy infrastructure
         uses: $/.github/actions/deploy-infrastructure
         with:
-          infra-directory: ./infrastructure/shared
+          infra-directory: infra
           resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}

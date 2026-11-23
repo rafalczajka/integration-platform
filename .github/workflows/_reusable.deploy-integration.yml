@@ -64,6 +64,10 @@ jobs:
   deploy:
     name: Deploy Integration
     needs: [build-infrastructure, build-functionapp]
+    concurrency:
+      group: integration-platform-deploy
+      queue: max
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
