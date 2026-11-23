@@ -31,7 +31,7 @@ builder.Services.AddSingleton<ITodoistApi, CachedTodoistApi>();
 builder.Services.AddScoped<WeeklyReport>();
 
 builder.Services
-    .AddRefitClient<ITodoistRawApi>(new RefitSettings
+    .AddRefitGeneratedClient<ITodoistRawApi>(new RefitSettings
     {
         ContentSerializer = new NewtonsoftJsonContentSerializer(
             new JsonSerializerSettings

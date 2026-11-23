@@ -110,7 +110,7 @@ internal sealed class DriveClient : IDisposable
             Parents = [destinationFolderId]
         };
 
-        using var stream = new MemoryStream(content);
+        await using var stream = new ReadOnlyMemoryStream(content);
 
         var request = _driveService.Files.Create(metadata, stream, contentType);
         await request.UploadAsync(cancellationToken);

@@ -1,10 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Azure.Functions.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Integrations.Gmail</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
-    <AzureFunctionsVersion>V4</AzureFunctionsVersion>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +12,6 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" />
   </ItemGroup>
 
 </Project>

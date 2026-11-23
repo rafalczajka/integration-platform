@@ -15,6 +15,7 @@ internal sealed class UnusedLabelsCleanupRule(
 {
     private static readonly HashSet<string> ExcludedLabels =
     [
+        with(StringComparer.OrdinalIgnoreCase),
         Labels.Impact,
         Labels.Inactive,
         Labels.Subtask,
