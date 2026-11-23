@@ -1,4 +1,4 @@
-name: Reusable (R06) - Publish NuGet
+name: Reusable - Publish NuGet
 
 on:
   workflow_call:
@@ -31,7 +31,7 @@ jobs:
           source-url: ${{ env.SOURCE }}
 
       - name: NuGet auth and restore
-        uses: ./.github/actions/nuget-auth-restore
+        uses: $/.github/actions/nuget-auth-restore
         with:
           github-token: ${{ github.token }}
           working-directory: ${{ env.PROJECT_DIRECTORY }}

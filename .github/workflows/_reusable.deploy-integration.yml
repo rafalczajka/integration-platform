@@ -1,0 +1,104 @@
+name: Reusable - Build and Deploy Integration
+
+on:
+  workflow_call:
+    inputs:
+      infra-directory:
+        required: true
+        type: string
+      integration-directory:
+        required: true
+        type: string
+    secrets:
+      azure-credentials:
+        required: true
+      azure-resource-group:
+        required: true
+
+jobs:
+  build-infrastructure:
+    name: Build Bicep Infrastructure
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Build infrastructure
+        uses: $/.github/actions/build-infrastructure
+        with:
+          infra-directory: ${{ inputs.infra-directory }}
+
+      - name: Upload infrastructure artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: infra
+          path: ${{ inputs.infra-directory }}/*.json
+          if-no-files-found: error
+
+  build-functionapp:
+    name: Build Function App
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Build function app
+        id: build
+        uses: $/.github/actions/build-functionapp
+        with:
+          integration-directory: ${{ inputs.integration-directory }}
+          github-token: ${{ github.token }}
+
+      - name: Upload function app artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: functionapp
+          path: ${{ steps.build.outputs.package-path }}
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy Integration
+    needs: [build-infrastructure, build-functionapp]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Download infrastructure artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: infra
+          path: infra
+
+      - name: Download function app artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: functionapp
+          path: functionapp
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.azure-credentials }}
+
+      - name: Deploy infrastructure
+        id: deploy-infrastructure
+        uses: $/.github/actions/deploy-infrastructure
+        with:
+          infra-directory: infra
+          resource-group: ${{ secrets.azure-resource-group }}
+
+      - name: Deploy function app
+        uses: $/.github/actions/deploy-functionapp
+        with:
+          functionapp-name: ${{ steps.deploy-infrastructure.outputs.app-name }}
+          resource-group: ${{ secrets.azure-resource-group }}
+          package-path: functionapp/functionapp.zip
+

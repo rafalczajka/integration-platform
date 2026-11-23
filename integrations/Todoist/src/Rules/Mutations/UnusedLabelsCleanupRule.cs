@@ -16,11 +16,11 @@ internal sealed class UnusedLabelsCleanupRule(
     private static readonly HashSet<string> ExcludedLabels =
     [
         with(StringComparer.OrdinalIgnoreCase),
-        Constants.ImpactLable,
-        Constants.InactiveLabel,
-        Constants.SubtaskLabel,
-        Constants.BlockedLabel,
-        Constants.BlockerLabel
+        Labels.Impact,
+        Labels.Inactive,
+        Labels.Subtask,
+        Labels.Blocked,
+        Labels.Blocker
     ];
 
     /// <inheritdoc />

@@ -1,5 +1,5 @@
 using Integrations.Notifications;
-using Integrations.Todoist.Reports;
+using Integrations.Todoist.Report;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 

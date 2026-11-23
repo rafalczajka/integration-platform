@@ -20,14 +20,14 @@ internal sealed class BlockedTaskCommentRule(
     /// <seealso cref="BlockedTaskCommentRule" />
     public async Task ExecuteAsync(TodoistRuleContext context, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Fetching tasks with the {Label} label...", Constants.BlockedLabel);
+        logger.LogInformation("Fetching tasks with the {Label} label...", Labels.Blocked);
 
-        var blockedTasks = (await todoist.GetTasksByFilterAsync($"@{Constants.BlockedLabel}", cancellationToken)).ToArray();
+        var blockedTasks = (await todoist.GetTasksByFilterAsync($"@{Labels.Blocked}", cancellationToken)).ToArray();
 
         TodoistGuards.EnsureAllTasksContainLabel(
             blockedTasks,
-            Constants.BlockedLabel,
-            $"{nameof(BlockedTaskCommentRule)} @{Constants.BlockedLabel} fetch");
+            Labels.Blocked,
+            $"{nameof(BlockedTaskCommentRule)} @{Labels.Blocked} fetch");
 
         var validationResults = await Task.WhenAll(
             blockedTasks.Select(task => ValidateCommentsAsync(task, cancellationToken)));
@@ -70,7 +70,7 @@ internal sealed class BlockedTaskCommentRule(
         if (syncResult.UpdatedTasks.Count > 0)
         {
             context.AddMessage(NotificationFormatter.BuildNumberedListMessage(
-                $"Updated '{Constants.BlockerLabel}' label for {syncResult.UpdatedTasks.Count} tasks:",
+                $"Updated '{Labels.Blocker}' label for {syncResult.UpdatedTasks.Count} tasks:",
                 syncResult.UpdatedTasks
                     .OrderBy(task => task.Content, StringComparer.OrdinalIgnoreCase)
                     .Select(task => task.Content)));

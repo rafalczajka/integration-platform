@@ -1,0 +1,27 @@
+name: Deploy Function App
+description: Deploy a function app package using an existing Azure login.
+inputs:
+  resource-group:
+    description: Azure resource group containing the function app.
+    required: true
+  functionapp-name:
+    description: Name of the function app to deploy.
+    required: true
+  package-path:
+    description: Path to the deployment ZIP file.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Deploy to Azure
+      shell: bash
+      env:
+        RESOURCE_GROUP: ${{ inputs.resource-group }}
+        FUNCTIONAPP_NAME: ${{ inputs.functionapp-name }}
+        PACKAGE_PATH: ${{ inputs.package-path }}
+      run: |
+        az functionapp deployment source config-zip \
+          --resource-group "$RESOURCE_GROUP" \
+          --name "$FUNCTIONAPP_NAME" \
+          --src "$PACKAGE_PATH"

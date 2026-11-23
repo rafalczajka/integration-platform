@@ -1,0 +1,33 @@
+name: Deploy Bicep Infrastructure
+description: Deploy compiled infrastructure using an existing Azure login.
+inputs:
+  infra-directory:
+    description: Directory containing main.json and parameters.json.
+    required: true
+  resource-group:
+    description: Azure resource group to deploy to.
+    required: true
+outputs:
+  app-name:
+    description: Function app name, if supplied by the deployment outputs.
+    value: ${{ steps.deploy.outputs.app-name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Deploy infrastructure
+      id: deploy
+      shell: bash
+      env:
+        RESOURCE_GROUP: ${{ inputs.resource-group }}
+        INFRA_DIRECTORY: ${{ inputs.infra-directory }}
+      run: |
+        deploymentOutput=$(az deployment group create \
+          --resource-group "$RESOURCE_GROUP" \
+          --template-file "$INFRA_DIRECTORY/main.json" \
+          --parameters "$INFRA_DIRECTORY/parameters.json" \
+          --query properties.outputs \
+          --output json)
+
+        appName=$(echo "$deploymentOutput" | jq -r '.appName.value // empty')
+        echo "app-name=$appName" >> "$GITHUB_OUTPUT"

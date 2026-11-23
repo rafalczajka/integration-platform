@@ -13,6 +13,8 @@ internal sealed class SmtpOptions
 
     public string From { get; init; } = null!;
 
+    public string AllowedRecipients { get; init; } = null!;
+
     public string? FromName { get; init; }
 
     public string? User { get; init; }

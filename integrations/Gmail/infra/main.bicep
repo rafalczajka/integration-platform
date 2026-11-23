@@ -9,6 +9,7 @@ param timeZone string
 param smtpHost string
 param smtpPort string
 param smtpUserSecretName string
+param smtpAllowedRecipientsSecretName string
 param smtpPasswordSecretName string
 param smtpFromName string
 param smtpUseSsl string
@@ -38,6 +39,10 @@ module functionApp '../../../infrastructure/modules/functionApp.bicep' = {
       {
         name: 'Smtp__From'
         value: '@Microsoft.KeyVault(VaultName=${sharedKeyVaultName};SecretName=${smtpUserSecretName})'
+      }
+      {
+        name: 'Smtp__AllowedRecipients'
+        value: '@Microsoft.KeyVault(VaultName=${sharedKeyVaultName};SecretName=${smtpAllowedRecipientsSecretName})'
       }
       {
         name: 'Smtp__FromName'
